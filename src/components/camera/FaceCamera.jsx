@@ -13,15 +13,27 @@ import "./CameraStyles.css";
 export default function FaceCamera() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-
+  const lastProcessTime = useRef(0);//by ais
+const stableFrameCount = useRef(0);//ais
   // ⭐ PROFESSIONAL OUTPUT STATES
   const [step, setStep] = useState("Starting Camera...");
   const [instruction, setInstruction] = useState("Please allow camera access");
   const [verified, setVerified] = useState(false);
 
-  useEffect(() => {
-    initCamera();
-  }, []);
+  // useEffect(() => {
+  //   initCamera();
+  // }, []);
+//by ais
+useEffect(() => {
+  initCamera();
+
+  return () => {
+    if (videoRef.current?.srcObject) {
+      videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+    }
+  };
+}, []);
+
 
   const initCamera = async () => {
     await startWebcam(videoRef);
@@ -32,11 +44,23 @@ export default function FaceCamera() {
     const faceMesh = createFaceMesh(onResults);
 
     const camera = new Camera(videoRef.current, {
+      // onFrame: async () => {
+      //   if (videoRef.current) {
+      //     await faceMesh.send({ image: videoRef.current });
+      //   }
+      // },
       onFrame: async () => {
-        if (videoRef.current) {
-          await faceMesh.send({ image: videoRef.current });
-        }
-      },
+  const now = Date.now();
+
+  // Limit processing to ~15 FPS (66ms interval)
+  if (now - lastProcessTime.current < 66) return;
+
+  lastProcessTime.current = now;
+
+  if (videoRef.current) {
+    await faceMesh.send({ image: videoRef.current });
+  }
+},
       width: CAMERA_WIDTH,
       height: CAMERA_HEIGHT,
     });
@@ -46,64 +70,75 @@ export default function FaceCamera() {
 
   // ⭐ MAIN LOGIC
   const onResults = (results) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+  const canvas = canvasRef.current;
+  const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw camera frame
-    ctx.drawImage(
-      results.image,
-      0,
-      0,
-      CAMERA_WIDTH,
-      CAMERA_HEIGHT
-    );
+  ctx.drawImage(
+    results.image,
+    0,
+    0,
+    CAMERA_WIDTH,
+    CAMERA_HEIGHT
+  );
 
-    // ❌ No face
-    if (!results.multiFaceLandmarks) {
-      setStep("No Face Detected ❌");
-      setInstruction("Show your clear face to camera");
-      setVerified(false);
-      return;
-    }
+  // ❌ No face detected
+  if (!results.multiFaceLandmarks) {
+    stableFrameCount.current = 0;
+    setStep("No Face Detected ❌");
+    setInstruction("Show your clear face to camera");
+    setVerified(false);
+    return;
+  }
 
-    const landmarks = results.multiFaceLandmarks[0];
+  // Increase stable counter
+  stableFrameCount.current = Math.min(
+    stableFrameCount.current + 1,
+    10
+  );
 
-    const box = getBoundingBox(
-      landmarks,
-      CAMERA_WIDTH,
-      CAMERA_HEIGHT
-    );
+  // Wait for 5 stable frames
+  if (stableFrameCount.current < 5) {
+    return;
+  }
 
-    drawBox(ctx, box);
+  const landmarks = results.multiFaceLandmarks[0];
 
-    // ⭐ BASIC CLEAR FACE VALIDATION
-    const faceArea = box.w * box.h;
-    const minArea = 60000; // adjust if needed
+  const box = getBoundingBox(
+    landmarks,
+    CAMERA_WIDTH,
+    CAMERA_HEIGHT
+  );
 
-    const centerX = box.x + box.w / 2;
-    const centerY = box.y + box.h / 2;
+  const faceArea = box.w * box.h;
+  const totalArea = CAMERA_WIDTH * CAMERA_HEIGHT;
+  const minArea = totalArea * 0.30;
 
-    const isCentered =
-      centerX > CAMERA_WIDTH * 0.3 &&
-      centerX < CAMERA_WIDTH * 0.7 &&
-      centerY > CAMERA_HEIGHT * 0.3 &&
-      centerY < CAMERA_HEIGHT * 0.7;
+  const centerX = box.x + box.w / 2;
+  const centerY = box.y + box.h / 2;
 
-    // 🚨 If object/photo or unclear face → usually fails these checks
-    if (faceArea < minArea || !isCentered) {
-      setStep("Face Not Clear ⚠️");
-      setInstruction("Move closer and align face properly");
-      setVerified(false);
-      return;
-    }
+  const isCentered =
+    centerX > CAMERA_WIDTH * 0.3 &&
+    centerX < CAMERA_WIDTH * 0.7 &&
+    centerY > CAMERA_HEIGHT * 0.3 &&
+    centerY < CAMERA_HEIGHT * 0.7;
 
-    // ✅ CLEAR FACE DETECTED
-    setStep("Face Detected ✅");
-    setInstruction("Hold steady for verification...");
-    setVerified(true);
-  };
+  // 🚨 Invalid face condition
+  if (faceArea < minArea || !isCentered) {
+    setStep("Face Not Clear ⚠️");
+    setInstruction("Move closer and align face properly");
+    setVerified(false);
+    return; // IMPORTANT
+  }
+
+  // ✅ Only draw box when valid
+  drawBox(ctx, box);
+
+  setStep("Face Detected ✅");
+  setInstruction("Hold steady for verification...");
+  setVerified(true);
+};
 
   return (
     <div className="cameraWrapper">

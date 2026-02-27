@@ -1,5 +1,6 @@
 import { FaceMesh } from "@mediapipe/face_mesh";
-
+// import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
+// import { FACEMESH_TESSELATION } from "@mediapipe/face_mesh";
 export const createFaceMesh = (onResults) => {
   const faceMesh = new FaceMesh({
     locateFile: (file) =>
@@ -9,8 +10,8 @@ export const createFaceMesh = (onResults) => {
   faceMesh.setOptions({
     maxNumFaces: 1,
     refineLandmarks: true,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5,
+    minDetectionConfidence: 0.7,
+    minTrackingConfidence: 0.7,
   });
 
   faceMesh.onResults(onResults);
