@@ -1,11 +1,14 @@
 export const getBoundingBox = (landmarks, width, height) => {
-  let minX = 1, minY = 1, maxX = 0, maxY = 0;
+  let minX = 1,
+    minY = 1,
+    maxX = 0,
+    maxY = 0;
 
-  landmarks.forEach((p) => {
-    minX = Math.min(minX, p.x);
-    minY = Math.min(minY, p.y);
-    maxX = Math.max(maxX, p.x);
-    maxY = Math.max(maxY, p.y);
+  landmarks.forEach((point) => {
+    minX = Math.min(minX, point.x);
+    minY = Math.min(minY, point.y);
+    maxX = Math.max(maxX, point.x);
+    maxY = Math.max(maxY, point.y);
   });
 
   return {

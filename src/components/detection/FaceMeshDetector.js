@@ -1,6 +1,8 @@
 import { FaceMesh } from "@mediapipe/face_mesh";
+// Optional (if you want to draw mesh lines later)
 // import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 // import { FACEMESH_TESSELATION } from "@mediapipe/face_mesh";
+
 export const createFaceMesh = (onResults) => {
   const faceMesh = new FaceMesh({
     locateFile: (file) =>
