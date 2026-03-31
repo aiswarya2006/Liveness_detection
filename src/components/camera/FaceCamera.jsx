@@ -179,7 +179,7 @@ export default function FaceCamera() {
       if (!verified && !stopped.current) {
         stopCamera("Fake image detected. Verification took too long");
       }
-    }, 15000);
+    }, 30000);
 
     const faceMesh = createFaceMesh(onResults);
 
