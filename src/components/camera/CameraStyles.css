@@ -1,3 +1,468 @@
+:root {
+  --page-bg: linear-gradient(135deg, #f8f1e7 0%, #e5edf5 50%, #d7e3f0 100%);
+  --panel-bg: rgba(13, 27, 42, 0.92);
+  --panel-border: rgba(255, 255, 255, 0.16);
+  --text-primary: #102033;
+  --text-soft: #5d6b7c;
+  --card-text: #f5f8fb;
+  --accent: #ff7a59;
+  --accent-strong: #ff5c35;
+  --success: #25b46b;
+  --warning: #f2a93b;
+  --danger: #e0565b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.mainContainer {
+  min-height: 100vh;
+  padding: 32px 24px 48px;
+  text-align: center;
+  background: var(--page-bg);
+  color: var(--text-primary);
+}
+
+.heroCopy {
+  width: min(760px, 100%);
+  margin: 0 auto 24px;
+}
+
+.eyebrow,
+.cardEyebrow,
+.statusLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.mainTitle {
+  margin: 10px 0 12px;
+  font-size: clamp(2.1rem, 4vw, 3.5rem);
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+.heroSubtitle {
+  margin: 0 auto;
+  max-width: 620px;
+  color: var(--text-soft);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.cameraSection {
+  width: fit-content;
+  margin: 0 auto;
+}
+
 .cameraWrapper {
   position: relative;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.cameraGlow {
+  position: absolute;
+  inset: -18px;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at top, rgba(255, 122, 89, 0.28), transparent 42%),
+    radial-gradient(circle at bottom right, rgba(37, 180, 107, 0.18), transparent 38%);
+  filter: blur(10px);
+  z-index: 0;
+}
+
+.cameraCanvas {
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: min(92vw, 640px);
+  height: auto;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 28px;
+  transform: scaleX(-1);
+  box-shadow: 0 24px 60px rgba(16, 32, 51, 0.22);
+  background: #0d1b2a;
+}
+
+.floatingCard {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  width: min(390px, calc(100vw - 40px));
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 20px;
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 42px rgba(10, 18, 28, 0.30);
+  text-align: left;
+  color: var(--card-text);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardHeader h2 {
+  margin: 6px 0 0;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.cardEyebrow {
+  color: rgba(245, 248, 251, 0.68);
+}
+
+.statusBadge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.statusBadge.active {
+  background: rgba(242, 169, 59, 0.18);
+  color: #ffd597;
+}
+
+.statusBadge.success {
+  background: rgba(37, 180, 107, 0.18);
+  color: #8ff0be;
+}
+
+.statusBadge.error {
+  background: rgba(224, 86, 91, 0.18);
+  color: #ffb2b5;
+}
+
+.topProgress {
+  width: 100%;
+  height: 10px;
+  margin: 18px 0 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.topProgressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent) 0%, #ffd166 50%, var(--success) 100%);
+  transition: width 0.35s ease;
+}
+
+.progressSummary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: rgba(245, 248, 251, 0.78);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.statusPanel {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.statusPanel.active {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.statusPanel.success {
+  background: rgba(37, 180, 107, 0.15);
+  border-color: rgba(143, 240, 190, 0.22);
+}
+
+.statusPanel.error {
+  background: rgba(224, 86, 91, 0.15);
+  border-color: rgba(255, 178, 181, 0.18);
+}
+
+.statusLabel {
+  color: rgba(245, 248, 251, 0.68);
+}
+
+.statusText {
+  margin: 8px 0 6px;
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.statusHint {
+  margin: 0;
+  color: rgba(245, 248, 251, 0.80);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.instructionShowcase,
+.quickTips {
+  margin-top: 16px;
+}
+
+.instructionLabel,
+.quickTipsTitle {
+  margin: 0 0 8px;
+  color: rgba(245, 248, 251, 0.70);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.instructionVisual,
+.quickTips,
+.nextStepCard {
+  padding: 16px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.instructionFace {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-size: 2.4rem;
+}
+
+.emojiDirection {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.directionArrow {
+  color: #ffd166;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.instructionEmoji {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffe7a0;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.instructionTitle {
+  margin: 12px 0 6px;
+  font-size: 1.08rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.instructionDemo {
+  margin: 0;
+  color: rgba(245, 248, 251, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.nextStepCard {
+  margin-top: 16px;
+}
+
+.nextStepLabel {
+  margin: 0 0 8px;
+  color: rgba(245, 248, 251, 0.7);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nextStepPreview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nextStepEmoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.nextStepTitle {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.nextStepHint {
+  margin: 0;
+  color: rgba(245, 248, 251, 0.78);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.tipsList {
+  margin: 0;
+  padding-left: 20px;
+  color: rgba(245, 248, 251, 0.82);
+}
+
+.tipsList li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.tipsList li:last-child {
+  margin-bottom: 0;
+}
+
+.stepsGrid {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.stepItem.active {
+  transform: translateY(-1px);
+  border-color: rgba(255, 209, 102, 0.45);
+  background: rgba(255, 209, 102, 0.14);
+}
+
+.stepItem.done {
+  border-color: rgba(143, 240, 190, 0.28);
+  background: rgba(37, 180, 107, 0.12);
+}
+
+.stepIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.92rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.stepName {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.stepHint {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(245, 248, 251, 0.76);
+}
+
+.retryButton {
+  width: 100%;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 16px;
+  padding: 13px 16px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.retryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(255, 92, 53, 0.22);
+}
+
+.retryButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 1100px) {
+  .mainContainer {
+    padding-right: 440px;
+  }
+}
+
+@media (max-width: 720px) {
+  .mainContainer {
+    padding: 24px 14px 32px;
+  }
+
+  .cameraSection,
+  .cameraWrapper {
+    width: 100%;
+  }
+
+  .cameraCanvas {
+    width: 100%;
+  }
+
+  .floatingCard {
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin: 18px auto 0;
+  }
+
+  .progressSummary {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cameraGlow {
+    inset: -10px;
+  }
 }
