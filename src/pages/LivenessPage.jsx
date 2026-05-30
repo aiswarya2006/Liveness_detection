@@ -3,8 +3,7 @@ import FaceCamera from "../components/camera/FaceCamera";
 
 export default function LivenessPage() {
   return (
-    <div>
-      <h2>Liveness Detection</h2>
+    <div className="appPage">
       <FaceCamera />
     </div>
   );

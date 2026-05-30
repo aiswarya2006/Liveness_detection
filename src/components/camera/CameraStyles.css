@@ -1,15 +1,16 @@
 :root {
-  --page-bg: linear-gradient(135deg, #f8f1e7 0%, #e5edf5 50%, #d7e3f0 100%);
-  --panel-bg: rgba(13, 27, 42, 0.92);
-  --panel-border: rgba(255, 255, 255, 0.16);
-  --text-primary: #102033;
-  --text-soft: #5d6b7c;
-  --card-text: #f5f8fb;
-  --accent: #ff7a59;
-  --accent-strong: #ff5c35;
-  --success: #25b46b;
-  --warning: #f2a93b;
-  --danger: #e0565b;
+  --page-bg: #eef4f8;
+  --ink: #102033;
+  --muted: #657285;
+  --panel: rgba(255, 255, 255, 0.86);
+  --panel-strong: #ffffff;
+  --line: rgba(16, 32, 51, 0.12);
+  --navy: #102033;
+  --teal: #16a6a1;
+  --coral: #ff6b57;
+  --gold: #f1b84b;
+  --success: #1d9f65;
+  --danger: #d94b59;
 }
 
 * {
@@ -18,451 +19,434 @@
 
 body {
   margin: 0;
+  color: var(--ink);
+  background:
+    linear-gradient(135deg, rgba(22, 166, 161, 0.16), transparent 34%),
+    linear-gradient(315deg, rgba(255, 107, 87, 0.16), transparent 30%),
+    var(--page-bg);
 }
 
-.mainContainer {
+.livenessShell {
   min-height: 100vh;
-  padding: 32px 24px 48px;
-  text-align: center;
-  background: var(--page-bg);
-  color: var(--text-primary);
+  padding: 40px 24px 52px;
 }
 
 .heroCopy {
-  width: min(760px, 100%);
-  margin: 0 auto 24px;
+  width: min(860px, 100%);
+  margin: 0 auto 28px;
+  text-align: center;
 }
 
 .eyebrow,
 .cardEyebrow,
+.stageLabel,
 .statusLabel {
   margin: 0;
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .eyebrow {
-  color: var(--accent-strong);
-  font-weight: 800;
+  color: var(--coral);
 }
 
 .mainTitle {
   margin: 10px 0 12px;
-  font-size: clamp(2.1rem, 4vw, 3.5rem);
-  line-height: 1.05;
-  font-weight: 800;
+  font-size: clamp(2.25rem, 6vw, 4.6rem);
+  line-height: 1;
+  font-weight: 900;
 }
 
 .heroSubtitle {
+  max-width: 660px;
   margin: 0 auto;
-  max-width: 620px;
-  color: var(--text-soft);
+  color: var(--muted);
   font-size: 1.05rem;
   line-height: 1.65;
 }
 
-.cameraSection {
-  width: fit-content;
+.cameraLayout {
+  display: grid;
+  grid-template-columns: minmax(320px, 720px) minmax(300px, 380px);
+  gap: 24px;
+  align-items: stretch;
+  justify-content: center;
+  width: min(1180px, 100%);
   margin: 0 auto;
 }
 
-.cameraWrapper {
-  position: relative;
-  width: fit-content;
-  margin: 0 auto;
-}
-
-.cameraGlow {
-  position: absolute;
-  inset: -18px;
-  border-radius: 34px;
-  background:
-    radial-gradient(circle at top, rgba(255, 122, 89, 0.28), transparent 42%),
-    radial-gradient(circle at bottom right, rgba(37, 180, 107, 0.18), transparent 38%);
-  filter: blur(10px);
-  z-index: 0;
-}
-
-.cameraCanvas {
-  position: relative;
-  z-index: 1;
-  display: block;
-  max-width: min(92vw, 640px);
-  height: auto;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  border-radius: 28px;
-  transform: scaleX(-1);
-  box-shadow: 0 24px 60px rgba(16, 32, 51, 0.22);
-  background: #0d1b2a;
-}
-
-.floatingCard {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 10;
-  width: min(390px, calc(100vw - 40px));
-  max-height: calc(100vh - 40px);
-  overflow: auto;
-  padding: 20px;
-  border: 1px solid var(--panel-border);
-  border-radius: 24px;
-  background: var(--panel-bg);
+.cameraStage,
+.controlPanel {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: var(--panel);
+  box-shadow: 0 24px 70px rgba(16, 32, 51, 0.14);
   backdrop-filter: blur(18px);
-  box-shadow: 0 18px 42px rgba(10, 18, 28, 0.30);
-  text-align: left;
-  color: var(--card-text);
 }
 
-.cardHeader {
+.cameraStage {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px;
+  border-radius: 28px;
+}
+
+.cameraHeader,
+.panelTop,
+.progressSummary,
+.timerRow span {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
-}
-
-.cardHeader h2 {
-  margin: 6px 0 0;
-  font-size: 1.35rem;
-  line-height: 1.2;
-}
-
-.cardEyebrow {
-  color: rgba(245, 248, 251, 0.68);
-}
-
-.statusBadge {
-  padding: 8px 12px;
-  border-radius: 999px;
-  font-size: 0.76rem;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-.statusBadge.active {
-  background: rgba(242, 169, 59, 0.18);
-  color: #ffd597;
-}
-
-.statusBadge.success {
-  background: rgba(37, 180, 107, 0.18);
-  color: #8ff0be;
-}
-
-.statusBadge.error {
-  background: rgba(224, 86, 91, 0.18);
-  color: #ffb2b5;
-}
-
-.topProgress {
-  width: 100%;
-  height: 10px;
-  margin: 18px 0 12px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.topProgressFill {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--accent) 0%, #ffd166 50%, var(--success) 100%);
-  transition: width 0.35s ease;
-}
-
-.progressSummary {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-  color: rgba(245, 248, 251, 0.78);
-  font-size: 0.86rem;
-  font-weight: 700;
-}
-
-.statusPanel {
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.statusPanel.active {
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-}
-
-.statusPanel.success {
-  background: rgba(37, 180, 107, 0.15);
-  border-color: rgba(143, 240, 190, 0.22);
-}
-
-.statusPanel.error {
-  background: rgba(224, 86, 91, 0.15);
-  border-color: rgba(255, 178, 181, 0.18);
-}
-
-.statusLabel {
-  color: rgba(245, 248, 251, 0.68);
-}
-
-.statusText {
-  margin: 8px 0 6px;
-  font-size: 1.45rem;
-  font-weight: 800;
-  line-height: 1.15;
-}
-
-.statusHint {
-  margin: 0;
-  color: rgba(245, 248, 251, 0.80);
-  font-size: 1rem;
-  line-height: 1.55;
-}
-
-.instructionShowcase,
-.quickTips {
-  margin-top: 16px;
-}
-
-.instructionLabel,
-.quickTipsTitle {
-  margin: 0 0 8px;
-  color: rgba(245, 248, 251, 0.70);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.instructionVisual,
-.quickTips,
-.nextStepCard {
-  padding: 16px 14px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.instructionFace {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  font-size: 2.4rem;
-}
-
-.emojiDirection {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.directionArrow {
-  color: #ffd166;
-  font-size: 2rem;
-  font-weight: 800;
-}
-
-.instructionEmoji {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #ffe7a0;
-  font-size: 1.7rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-}
-
-.instructionTitle {
-  margin: 12px 0 6px;
-  font-size: 1.08rem;
-  font-weight: 800;
-  text-align: center;
-}
-
-.instructionDemo {
-  margin: 0;
-  color: rgba(245, 248, 251, 0.78);
-  font-size: 0.95rem;
-  line-height: 1.45;
-  text-align: center;
-}
-
-.nextStepCard {
-  margin-top: 16px;
-}
-
-.nextStepLabel {
-  margin: 0 0 8px;
-  color: rgba(245, 248, 251, 0.7);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.nextStepPreview {
-  display: flex;
-  align-items: center;
   gap: 14px;
 }
 
-.nextStepEmoji {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 62px;
-  height: 62px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.06);
-  font-size: 2rem;
-  flex-shrink: 0;
+.stageLabel,
+.cardEyebrow,
+.statusLabel {
+  color: var(--muted);
 }
 
-.nextStepTitle {
-  margin: 0 0 4px;
-  font-size: 1rem;
+.cameraHeader h2 {
+  margin: 6px 0 0;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.1;
+}
+
+.statusBadge {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 9px 13px;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.statusBadge.active {
+  color: #795200;
+  background: rgba(241, 184, 75, 0.22);
+}
+
+.statusBadge.success {
+  color: #0b6b3f;
+  background: rgba(29, 159, 101, 0.18);
+}
+
+.statusBadge.error {
+  color: #9d2633;
+  background: rgba(217, 75, 89, 0.16);
+}
+
+.cameraFrame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(22, 166, 161, 0.18), transparent),
+    #0c1828;
+  aspect-ratio: 4 / 3;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.hiddenVideo {
+  display: none;
+}
+
+.cameraCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.corner {
+  position: absolute;
+  z-index: 2;
+  width: 54px;
+  height: 54px;
+  border-color: rgba(255, 255, 255, 0.88);
+}
+
+.topLeft {
+  top: 18px;
+  left: 18px;
+  border-top: 3px solid;
+  border-left: 3px solid;
+  border-top-left-radius: 14px;
+}
+
+.topRight {
+  top: 18px;
+  right: 18px;
+  border-top: 3px solid;
+  border-right: 3px solid;
+  border-top-right-radius: 14px;
+}
+
+.bottomLeft {
+  bottom: 18px;
+  left: 18px;
+  border-bottom: 3px solid;
+  border-left: 3px solid;
+  border-bottom-left-radius: 14px;
+}
+
+.bottomRight {
+  right: 18px;
+  bottom: 18px;
+  border-right: 3px solid;
+  border-bottom: 3px solid;
+  border-bottom-right-radius: 14px;
+}
+
+.scanLine {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 14%;
+  z-index: 2;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  box-shadow: 0 0 18px rgba(22, 166, 161, 0.75);
+  animation: scan 3.2s ease-in-out infinite;
+}
+
+@keyframes scan {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: translateY(300px);
+    opacity: 1;
+  }
+}
+
+.timerRow {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.timerRow span {
+  color: var(--muted);
+  font-size: 0.95rem;
   font-weight: 800;
 }
 
-.nextStepHint {
+.timerRow strong {
+  color: var(--ink);
+}
+
+.timerTrack,
+.topProgress {
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(16, 32, 51, 0.1);
+}
+
+.timerFill,
+.topProgressFill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+
+.timerFill.active {
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+}
+
+.timerFill.success,
+.topProgressFill {
+  background: linear-gradient(90deg, var(--teal), var(--success));
+}
+
+.timerFill.error {
+  background: linear-gradient(90deg, var(--coral), var(--danger));
+}
+
+.controlPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-radius: 24px;
+}
+
+.resetButton {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 15px;
+  color: #ffffff;
+  background: var(--navy);
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.resetButton:hover {
+  transform: translateY(-1px);
+  background: #172b42;
+  box-shadow: 0 12px 24px rgba(16, 32, 51, 0.18);
+}
+
+.statusPanel {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel-strong);
+}
+
+.statusPanel.active {
+  border-color: rgba(241, 184, 75, 0.46);
+}
+
+.statusPanel.success {
+  border-color: rgba(29, 159, 101, 0.35);
+  background: rgba(29, 159, 101, 0.08);
+}
+
+.statusPanel.error {
+  border-color: rgba(217, 75, 89, 0.32);
+  background: rgba(217, 75, 89, 0.08);
+}
+
+.statusPanel h3 {
+  margin: 10px 0 8px;
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.statusPanel p:last-child {
   margin: 0;
-  color: rgba(245, 248, 251, 0.78);
-  font-size: 0.9rem;
-  line-height: 1.45;
+  color: var(--muted);
+  line-height: 1.55;
 }
 
-.tipsList {
-  margin: 0;
-  padding-left: 20px;
-  color: rgba(245, 248, 251, 0.82);
+.progressBlock {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
 }
 
-.tipsList li {
-  margin-bottom: 8px;
-  line-height: 1.5;
+.progressSummary {
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-weight: 900;
 }
 
-.tipsList li:last-child {
-  margin-bottom: 0;
+.progressSummary strong {
+  color: var(--ink);
 }
 
 .stepsGrid {
   display: grid;
   gap: 10px;
-  margin-top: 16px;
 }
 
 .stepItem {
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 46px 1fr;
   gap: 12px;
+  align-items: center;
   padding: 12px;
+  border: 1px solid var(--line);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.05);
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  background: rgba(255, 255, 255, 0.58);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
 }
 
 .stepItem.active {
   transform: translateY(-1px);
-  border-color: rgba(255, 209, 102, 0.45);
-  background: rgba(255, 209, 102, 0.14);
+  border-color: rgba(241, 184, 75, 0.65);
+  background: rgba(241, 184, 75, 0.14);
 }
 
 .stepItem.done {
-  border-color: rgba(143, 240, 190, 0.28);
-  background: rgba(37, 180, 107, 0.12);
+  border-color: rgba(29, 159, 101, 0.38);
+  background: rgba(29, 159, 101, 0.1);
 }
 
 .stepIndex {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  font-size: 0.92rem;
-  font-weight: 800;
-  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  color: #ffffff;
+  background: var(--navy);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.stepItem.done .stepIndex {
+  background: var(--success);
+}
+
+.stepItem.active .stepIndex {
+  color: #5b3c00;
+  background: var(--gold);
 }
 
 .stepName {
   margin: 0;
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .stepHint {
   margin: 4px 0 0;
-  font-size: 0.88rem;
-  line-height: 1.45;
-  color: rgba(245, 248, 251, 0.76);
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
-.retryButton {
-  width: 100%;
-  margin-top: 16px;
-  border: 0;
-  border-radius: 16px;
-  padding: 13px 16px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+@media (max-width: 920px) {
+  .livenessShell {
+    padding: 28px 14px 36px;
+  }
 
-.retryButton:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(255, 92, 53, 0.22);
-}
+  .cameraLayout {
+    grid-template-columns: 1fr;
+  }
 
-.retryButton:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 1100px) {
-  .mainContainer {
-    padding-right: 440px;
+  .controlPanel {
+    order: -1;
   }
 }
 
-@media (max-width: 720px) {
-  .mainContainer {
-    padding: 24px 14px 32px;
+@media (max-width: 560px) {
+  .cameraStage,
+  .controlPanel {
+    border-radius: 18px;
+    padding: 14px;
   }
 
-  .cameraSection,
-  .cameraWrapper {
-    width: 100%;
+  .cameraHeader,
+  .panelTop {
+    align-items: flex-start;
   }
 
-  .cameraCanvas {
-    width: 100%;
+  .timerRow {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
-  .floatingCard {
-    position: static;
-    width: 100%;
-    max-height: none;
-    margin: 18px auto 0;
-  }
-
-  .progressSummary {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .cameraGlow {
-    inset: -10px;
+  .corner {
+    width: 38px;
+    height: 38px;
   }
 }
